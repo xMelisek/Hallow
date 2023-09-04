@@ -2,13 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using HallowEngine;
+using HallowEngine.Core;
 
 namespace HallowEngine.Playground
 {
-    public class Game1 : Game
+    public class Game1 : GameWindow
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private SliceTex _stretchedSliced;
+        private Texture2D _defaultTex;
 
         public Game1()
         {
@@ -28,6 +32,9 @@ namespace HallowEngine.Playground
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _stretchedSliced = new SliceTex(Content.Load<Texture2D>("Graphics/Outline"), new Point(1, 1));
+            _defaultTex = Content.Load<Texture2D>("Graphics/Outline");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -44,6 +51,12 @@ namespace HallowEngine.Playground
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _stretchedSliced.DrawSlices(_spriteBatch, new Rectangle(120, 240, 50, 50), Color.Green);
+            _stretchedSliced.DrawSlices(_spriteBatch, new Rectangle(120, 300, 50, 100), Color.Green);
+            _spriteBatch.Draw(_defaultTex, new Rectangle(200, 240, 50, 50), Color.White);
+            _spriteBatch.Draw(_defaultTex, new Rectangle(200, 300, 50, 100), Color.White);
+            _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
